@@ -1,0 +1,18 @@
+{
+  "name": "bypass-passport-strategy",
+  "version": "1.0.0",
+  "description": "A passport authentication strategy specifically for Bypass",
+  "main": "./lib",
+  "scripts": {
+    "test": "./node_modules/bin/jasmine"
+  },
+  "dependencies": {
+    "passport-strategy": "1.x.x",
+    "request-promise": "^1.0.2"
+  },
+  "author": "Jonathan Spies <jonathan.spies@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine": "^2.4.1"
+  }
+}
