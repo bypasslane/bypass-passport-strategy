@@ -4,7 +4,7 @@
   "description": "A passport authentication strategy specifically for Bypass",
   "main": "./lib",
   "scripts": {
-    "test": "./node_modules/.bin/jasmine-node spec"
+    "test": "./node_modules/.bin/jasmine"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,6 @@
   "license": "ISC",
   "devDependencies": {
     "jasmine": "^2.4.1",
-    "jasmine-node": "^1.14.5",
     "mockery": "^1.4.0"
   }
 }
