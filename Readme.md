@@ -28,7 +28,7 @@ credentials and calls `done` providing a user.
 ```js
 var BypassStrategy = require("bypass-passport-strategy").Strategy;
 
-passport.use(new BypassStrategy());
+passport.use(new BypassStrategy({server: 'http://where-my-auth-is'}));
 ```
 
 #### Authenticate Requests
