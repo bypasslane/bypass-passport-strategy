@@ -53,4 +53,30 @@ describe('BypassAuth', function() {
     });
   });
 
+  describe(".restrictToVenues", function() {
+    it("returns a 401 if the venue id is not in the account venue ids", function() {
+      var spy = jasmine.createSpyObj('res', ['sendStatus']);
+      BypassAuth.restrictToVenues({params: {venue_id: 4}, user: {account: {venue_ids: [1,2,3]}}}, spy)
+      expect(spy.sendStatus).toHaveBeenCalledWith(401);
+    });
+
+    it("returns a 401 if there are no account venues", function() {
+      var spy = jasmine.createSpyObj('res', ['sendStatus']);
+      BypassAuth.restrictToVenues({params: {venue_id: 4}, user: {account: {}}}, spy)
+      expect(spy.sendStatus).toHaveBeenCalledWith(401);
+    });
+
+    it("returns a 401 if no venue was passed in", function() {
+      var spy = jasmine.createSpyObj('res', ['sendStatus']);
+      BypassAuth.restrictToVenues({params: {}, user: {account: {venue_ids: [1,2,3,4]}}}, spy)
+      expect(spy.sendStatus).toHaveBeenCalledWith(401);
+    });
+
+    it("calls next if the venue id is in the account venue ids", function() {
+      var nextSpy = jasmine.createSpy();
+      BypassAuth.restrictToVenues({params: {venue_id: 3}, user: {account: {venue_ids: [1,2,3]}}}, {}, nextSpy)
+      expect(nextSpy).toHaveBeenCalled();
+    });
+  });
+
 });
