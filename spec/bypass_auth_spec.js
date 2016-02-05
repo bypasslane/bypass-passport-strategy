@@ -39,4 +39,18 @@ describe('BypassAuth', function() {
     });
   });
 
+  describe(".restrictToAdmin", function() {
+    it("calls next if account.type is Admin", function() {
+      var spy = jasmine.createSpy();
+      BypassAuth.restrictToAdmin({user: {account: {type: "Admin"}}}, {}, spy);
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("sends a 401 if not an Admin", function() {
+      var spy = jasmine.createSpyObj('res', ['sendStatus']);
+      BypassAuth.restrictToAdmin({user: {account: {type: "User"}}}, spy, {});
+      expect(spy.sendStatus).toHaveBeenCalledWith(401);
+    });
+  });
+
 });
