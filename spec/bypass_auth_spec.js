@@ -77,6 +77,12 @@ describe('BypassAuth', function() {
       BypassAuth.restrictToVenues({params: {venue_id: 3}, user: {account: {venue_ids: [1,2,3]}}}, {}, nextSpy)
       expect(nextSpy).toHaveBeenCalled();
     });
+
+    it("calls next if the user is a super admin", function() {
+      var nextSpy = jasmine.createSpy();
+      BypassAuth.restrictToVenues({params: {venue_id: 10}, user: {account: {super_admin: true, venue_ids: [1,2,3]}}}, {}, nextSpy)
+      expect(nextSpy).toHaveBeenCalled();
+    });
   });
 
 });
