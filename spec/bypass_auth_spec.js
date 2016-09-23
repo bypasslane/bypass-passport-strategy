@@ -23,6 +23,21 @@ describe('BypassAuth', function() {
     mockery.disable();
   });
 
+  describe(".loginWithCredentials", function() {
+    it("returns a promise", function(){
+      var promise = BypassAuth.loginWithCredentials("http://localhost:3005", "user", "password", "User");
+      expect(typeof(promise.then)).toEqual('function');
+    });
+
+    it("returns user data if successful", function(done) {
+      var promise = BypassAuth.loginWithCredentials("http://localhost:3005", "user", "password", "User");
+      promise.then(function(user) {
+        expect(user).toEqual({"user": {}});
+        done();
+      })
+    });
+  });
+
   describe(".login", function() {
     it("returns a promise", function() {
       var promise = BypassAuth.login("http://localhost:3005", "sdfgjdsfgfds");
