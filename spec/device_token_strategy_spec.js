@@ -21,13 +21,13 @@ mockery.enable({
   useCleanCache: true
 });
 
-var BypassJwtStrategy = require('../lib/bypass_jwt_strategy');
+var DeviceTokenStrategy = require('../lib/device_token_strategy');
 
 // Pretty much identical to BypassStrategy, just looks at a different header value
-describe('BypassJwtStrategy', function() {
+describe('DeviceTokenStrategy', function() {
   it('requires a server', function() {
     expect(function() {
-      new BypassJwtStrategy()
+      new DeviceTokenStrategy();
     }).toThrow();
   });
 
@@ -35,7 +35,7 @@ describe('BypassJwtStrategy', function() {
     var strategy;
 
     beforeAll(function() {
-      strategy = new BypassJwtStrategy({server: 'http://authme.com'});
+      strategy = new DeviceTokenStrategy({server: 'http://authme.com'});
       strategy.fail = function() {}
       strategy.success = function() {}
       strategy.error = function() {}
@@ -46,7 +46,7 @@ describe('BypassJwtStrategy', function() {
     });
 
     it('should be named bypasstoken', function() {
-      expect(strategy.name).toEqual('bypassjwt');
+      expect(strategy.name).toEqual('devicetoken');
     });
 
     describe('authenticating', function() {
@@ -55,7 +55,7 @@ describe('BypassJwtStrategy', function() {
       beforeEach(function() {
         request = {
           headers: {
-            'x-bypass-jwt': "valid"
+            'x-device-token': "valid"
           }
         }
       });
@@ -73,7 +73,7 @@ describe('BypassJwtStrategy', function() {
           expect(strategy.fail).toHaveBeenCalledWith("Unauthorized");
           done();
         });
-        request.headers['x-bypass-jwt'] = 'fail';
+        request.headers['x-device-token'] = 'fail';
         strategy.authenticate(request, {});
       });
 
@@ -90,7 +90,7 @@ describe('BypassJwtStrategy', function() {
           expect(strategy.error).toHaveBeenCalled();
           done();
         });
-        request.headers['x-bypass-jwt'] = 'error';
+        request.headers['x-device-token'] = 'error';
         strategy.authenticate(request);
       });
 
