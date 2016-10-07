@@ -1,5 +1,7 @@
 # bypass-passport-strategy
 
+[![CircleCI](https://circleci.com/gh/bypasslane/bypass-passport-strategy.svg?style=svg&circle-token=def6ddf5670339f606d411b0d5095ca16fa8d57c)](https://circleci.com/gh/bypasslane/bypass-passport-strategy)
+
 [Passport](http://passportjs.org/) strategy for authenticating with Bypass session tokens
 
 This module lets you authenticate using a the Bypass session token in Node.js
