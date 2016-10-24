@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "type": "Admin",
+  "session_token": "token-string",
+  "email": "j@zee.com",
+  "organization_id": 0,
+  "role_id": 0,
+  "super_admin": true,
+  "venue_ids": [1]
+}
