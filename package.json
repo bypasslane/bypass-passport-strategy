@@ -19,6 +19,10 @@
   "license": "ISC",
   "devDependencies": {
     "crypto-js": "^3.1.7",
+    "gulp": "^3.9.1",
+    "gulp-istanbul": "^1.1.1",
+    "gulp-jasmine": "^2.4.2",
+    "istanbul": "^0.4.5",
     "jasmine": "^2.4.1",
     "mockery": "^1.4.0",
     "nock": "^8.0.0",

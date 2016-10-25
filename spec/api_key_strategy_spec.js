@@ -84,6 +84,33 @@ describe('APIKeyStrategy', function() {
         strategy.authenticate(request);
       });
 
+      it("calls fail if it can't decode the request", function () {
+        var scope = nock('https://apikeys.example.com')
+          .get('/api_creds/my-key')
+          .reply(200, JSON.parse(fs.readFileSync(__dirname + '/fixtures/api_creds.json')));
+
+        spyOn(strategy, 'success').and.callFake(function() {
+          expect(strategy.success).toHaveBeenCalled();
+          done();
+        });
+
+        request._setHeadersVariable('signature',"invalid-sig");
+        strategy.authenticate(request);
+      });
+      
+      it("handles a 500 gracefully", function () {
+        var scope = nock('https://apikeys.example.com')
+          .get('/api_creds/invalid-key')
+          .reply(500, {});
+
+        spyOn(strategy, 'fail').and.callFake(function(msg) {
+          expect(strategy.fail).toHaveBeenCalledWith("Unauthorized");
+          done();
+        });
+        request._setHeadersVariable('BYPASS-API-ACCESS-KEY','invalid-key');
+        strategy.authenticate(request, {});
+      })
+
     });
   });
 
