@@ -26,8 +26,6 @@ describe('DeviceTokenStrategy', function() {
       DeviceTokenStrategy = require('../lib/device_token_strategy');
     });
 
-
-    //BypassAuth = require("../lib/bypass_auth.js");
   });
 
   it('requires a server', function() {
