@@ -1,30 +1,32 @@
 /* global describe, it, expect */
-var mockery = require("mockery");
+var mock = require('./support/mock');
 var fs = require('fs');
-
-mockery.registerMock('./bypass_auth.js', {
-  login: function(server, key) {
-    if (key == "fail") {
-      return Promise.reject({statusCode: 401});
-    } else if (key == "error") {
-      return Promise.reject({statusCode: 500});
-    } else {
-      var response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json'));
-      return Promise.resolve(response);
-    }
-  }
-});
-
-mockery.enable({
-  warnOnReplace: false,
-  warnOnUnregistered: false,
-  useCleanCache: true
-});
 
 var DeviceTokenStrategy = require('../lib/device_token_strategy');
 
 // Pretty much identical to BypassStrategy, just looks at a different header value
 describe('DeviceTokenStrategy', function() {
+  beforeEach(function() {
+
+    mock({
+      './bypass_auth.js': {
+        login: function(server, key) {
+          if (key == "fail") {
+            return Promise.reject({statusCode: 401});
+          } else if (key == "error") {
+            return Promise.reject({statusCode: 500});
+          } else {
+            var response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json'));
+            return Promise.resolve(response);
+          }
+        }
+      }}, function () {
+    });
+
+
+    BypassAuth = require("../lib/bypass_auth.js");
+  });
+
   it('requires a server', function() {
     expect(function() {
       new DeviceTokenStrategy();
@@ -39,10 +41,6 @@ describe('DeviceTokenStrategy', function() {
       strategy.fail = function() {}
       strategy.success = function() {}
       strategy.error = function() {}
-    });
-
-    afterAll(function() {
-      mockery.disable();
     });
 
     it('should be named bypasstoken', function() {

@@ -1,60 +1,63 @@
-var mockery = require("mockery");
 var fs = require('fs');
+var nock = require('nock');
 
 var BypassAuth;
 
 describe('BypassAuth', function() {
   beforeEach(function() {
-    mockery.enable({
-      warnOnReplace: false,
-      warnOnUnregistered: false,
-      useCleanCache: true
-    });
-
-    mockery.registerMock('request-promise', function() {
-      var response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json'));
-      return Promise.resolve(response);
-    });
-
     BypassAuth = require("../lib/bypass_auth.js");
   });
 
-  afterEach(function() {
-    mockery.disable();
-  });
-
   describe(".loginWithCredentials", function() {
+    beforeEach(function() {
+      var scope = nock('http://localhost:3005')
+        .post('/auth')
+        .reply(200, JSON.parse(fs.readFileSync(__dirname + '/fixtures/admin_auth.json')));
+    });
+
     it("returns a promise", function(){
       var promise = BypassAuth.loginWithCredentials("http://localhost:3005", "user", "password", "User");
       expect(typeof(promise.then)).toEqual('function');
     });
 
-    it("returns user data if successful", function(done) {
+    it("returns admin data if successful", function(done) {
       var promise = BypassAuth.loginWithCredentials("http://localhost:3005", "user", "password", "User");
-      promise.then(function(user) {
-        expect(user).toEqual({"user": {}});
+      promise.then(function(admin) {
+        expect(admin).toEqual(JSON.parse(fs.readFileSync(__dirname + '/fixtures/admin_auth.json')));
         done();
       })
     });
   });
 
   describe(".login", function() {
+    beforeEach(function() {
+      var scope = nock('http://localhost:3005')
+        .get('/session')
+        .reply(200, JSON.parse(fs.readFileSync(__dirname + '/fixtures/admin_session.json')));
+    });
+
     it("returns a promise", function() {
       var promise = BypassAuth.login("http://localhost:3005", "sdfgjdsfgfds");
       expect(typeof(promise.then)).toEqual('function');
     });
 
-    it("returns user data if successful", function(done) {
+    it("returns admin data if successful", function(done) {
 
       var promise = BypassAuth.login("http://localhost:3005", "CORRECT");
-      promise.then(function(user) {
-        expect(user).toEqual({"user": {}});
+      promise.then(function(admin) {
+        expect(admin).toEqual(JSON.parse(fs.readFileSync(__dirname + '/fixtures/admin_session.json')));
         done();
       });
     });
   });
 
   describe(".login", function() {
+    beforeEach(function() {
+      var scope = nock('http://localhost:3005')
+        .get('/session')
+        .reply(200, JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json')));
+    });
+
     it("returns a promise", function() {
       var promise = BypassAuth.deviceLogin("http://localhost:3005", "sdfgjdsfgfds");
       expect(typeof(promise.then)).toEqual('function');
@@ -110,8 +113,8 @@ describe('BypassAuth', function() {
     });
 
     it("calls next if the user is a super admin", function() {
-      var nextSpy = jasmine.createSpy();
-      BypassAuth.restrictToVenues({params: {venue_id: 10}, user: {account: {super_admin: true, venue_ids: [1,2,3]}}}, {}, nextSpy)
+      var nextSpy = jasmine.createSpy('nextSpy');
+      BypassAuth.restrictToVenues({params: {venue_id: 10}, user: {account: {super_admin: true, venue_ids: [1,2,3]}}}, {}, nextSpy);
       expect(nextSpy).toHaveBeenCalled();
     });
   });

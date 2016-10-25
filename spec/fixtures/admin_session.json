@@ -1,0 +1,14 @@
+{
+  "token": "some-token",
+  "expires_at": "2016-10-18T19:53:13.340496765Z",
+  "refresh_count": 1,
+  "account": {
+    "id": 1,
+    "type": "Admin",
+    "email": "j@zee.com",
+    "organization_id": 0,
+    "role_id": 0,
+    "super_admin": true,
+    "venue_ids": [1]
+  }
+}
