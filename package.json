@@ -18,9 +18,10 @@
   "author": "Jonathan Spies <jonathan.spies@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "crypto-js": "^3.1.7",
     "jasmine": "^2.4.1",
     "mockery": "^1.4.0",
     "nock": "^8.0.0",
-    "crypto-js": "^3.1.7"
+    "node-mocks-http": "^1.5.4"
   }
 }
