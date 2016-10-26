@@ -87,6 +87,20 @@ describe('BypassAuth', function() {
     });
   });
 
+  describe(".restrictToSuperAdmin", function() {
+    it("calls next if account is super_admin", function() {
+      var spy = jasmine.createSpy();
+      BypassAuth.restrictToSuperAdmin({user: {account: {type: "Admin", super_admin: true}}}, {}, spy);
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("sends a 401 if not an Admin", function() {
+      var spy = jasmine.createSpyObj('res', ['sendStatus']);
+      BypassAuth.restrictToSuperAdmin({user: {account: {type: "Admin"}}}, spy, {});
+      expect(spy.sendStatus).toHaveBeenCalledWith(401);
+    });
+  });
+
   describe(".restrictToVenues", function() {
     it("returns a 401 if the venue id is not in the account venue ids", function() {
       var spy = jasmine.createSpyObj('res', ['sendStatus']);
