@@ -46,6 +46,20 @@ describe('APIKeyStrategy', function() {
         });
       });
 
+      it('calls fail if the response is empty', function(done) {
+        spyOn(strategy, 'fail').and.callFake(function(msg) {
+          expect(strategy.fail).toHaveBeenCalledWith("Unauthorized");
+          done();
+        });
+
+        var scope = nock('https://apikeys.example.com')
+          .get('/api_creds/empty-response')
+          .reply(200, null);
+
+        request._setHeadersVariable('BYPASS-API-ACCESS-KEY', 'empty-response');
+        strategy.authenticate(request, {});
+      });
+
       it('calls fail if no key is present', function(done) {
         spyOn(strategy, 'fail').and.callFake(function(msg) {
           expect(strategy.fail).toHaveBeenCalledWith("No API Key found");
