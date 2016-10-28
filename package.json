@@ -11,14 +11,21 @@
     "url": "https://github.com/bypasslane/bypass-passport-strategy"
   },
   "dependencies": {
+    "bypass-api-keys-sdk": "git+https://git@github.com/bypasslane/api-keys-js-sdk.git",
     "passport-strategy": "1.x.x",
     "request-promise": "^1.0.2"
   },
   "author": "Jonathan Spies <jonathan.spies@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "crypto-js": "^3.1.7",
+    "gulp": "^3.9.1",
+    "gulp-istanbul": "^1.1.1",
+    "gulp-jasmine": "^2.4.2",
+    "istanbul": "^0.4.5",
     "jasmine": "^2.4.1",
     "mockery": "^1.4.0",
-    "nock": "^8.0.0"
+    "nock": "^8.0.0",
+    "node-mocks-http": "^1.5.4"
   }
 }

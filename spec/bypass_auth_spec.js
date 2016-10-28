@@ -36,6 +36,10 @@ describe('BypassAuth', function() {
         .reply(200, JSON.parse(fs.readFileSync(__dirname + '/fixtures/admin_session.json')));
     });
 
+    it("throws an error if no session_token is passed in", function() {
+      expect(()=> { BypassAuth.login() }).toThrow(new Error("Invalid session token"));
+    });
+
     it("returns a promise", function() {
       var promise = BypassAuth.login("http://localhost:3005", "sdfgjdsfgfds");
       expect(typeof(promise.then)).toEqual('function');
@@ -51,11 +55,15 @@ describe('BypassAuth', function() {
     });
   });
 
-  describe(".login", function() {
+  describe(".deviceLogin", function() {
     beforeEach(function() {
       var scope = nock('http://localhost:3005')
         .get('/session')
         .reply(200, JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json')));
+    });
+
+    it("throws an error if no session_token is passed in", function() {
+      expect(()=> { BypassAuth.deviceLogin() }).toThrow(new Error("Invalid device token"));
     });
 
     it("returns a promise", function() {

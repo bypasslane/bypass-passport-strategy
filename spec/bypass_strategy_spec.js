@@ -1,29 +1,30 @@
 /* global describe, it, expect */
-var mockery = require("mockery");
+
+var mock = require('./support/mock');
 var fs = require('fs');
 
-mockery.registerMock('./bypass_auth.js', {
-  login: function(server, key) {
-    if (key == "fail") {
-      return Promise.reject({statusCode: 401});
-    } else if (key == "error") {
-      return Promise.reject({statusCode: 500});
-    } else {
-      var response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json'));
-      return Promise.resolve(response);
-    }
-  }
-});
-
-mockery.enable({
-  warnOnReplace: false,
-  warnOnUnregistered: false,
-  useCleanCache: true
-});
-
-var BypassStrategy = require('../lib/bypass_strategy');
-
 describe('BypassStrategy', function() {
+  var BypassStrategy;
+  beforeEach(function() {
+    mock({
+      './bypass_auth.js': {
+        login: function(server, key) {
+          if (key == "fail") {
+            return Promise.reject({statusCode: 401});
+          } else if (key == "error") {
+            return Promise.reject({statusCode: 500});
+          } else if (key == "no-user") {
+            return Promise.resolve(null);
+          } else {
+            var response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json'));
+            return Promise.resolve(response);
+          }
+        }
+      }}, function () {
+      BypassStrategy = require('../lib/bypass_strategy');
+    });
+
+  });
 
   it('requires a server', function() {
     expect(function() {
@@ -39,10 +40,6 @@ describe('BypassStrategy', function() {
       strategy.fail = function() {}
       strategy.success = function() {}
       strategy.error = function() {}
-    });
-
-    afterAll(function() {
-      mockery.disable();
     });
 
     it('should be named bypasstoken', function() {
@@ -93,6 +90,15 @@ describe('BypassStrategy', function() {
         request.headers['x-session-token'] = 'error';
         strategy.authenticate(request);
       });
+
+      it('fails if the response does not return a user', function () {
+        spyOn(strategy, 'error').and.callFake(function() {
+          expect(strategy.fail).toHaveBeenCalled();
+          done();
+        });
+        request.headers['x-session-token'] = 'no-user';
+        strategy.authenticate(request);
+      })
 
     });
   });

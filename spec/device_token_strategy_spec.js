@@ -2,10 +2,10 @@
 var mock = require('./support/mock');
 var fs = require('fs');
 
-var DeviceTokenStrategy = require('../lib/device_token_strategy');
 
 // Pretty much identical to BypassStrategy, just looks at a different header value
 describe('DeviceTokenStrategy', function() {
+  var DeviceTokenStrategy;
   beforeEach(function() {
 
     mock({
@@ -15,16 +15,17 @@ describe('DeviceTokenStrategy', function() {
             return Promise.reject({statusCode: 401});
           } else if (key == "error") {
             return Promise.reject({statusCode: 500});
+          } else if (key == "no-user") {
+            return Promise.resolve(null);
           } else {
             var response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json'));
             return Promise.resolve(response);
           }
         }
       }}, function () {
+      DeviceTokenStrategy = require('../lib/device_token_strategy');
     });
 
-
-    BypassAuth = require("../lib/bypass_auth.js");
   });
 
   it('requires a server', function() {
@@ -38,9 +39,9 @@ describe('DeviceTokenStrategy', function() {
 
     beforeAll(function() {
       strategy = new DeviceTokenStrategy({server: 'http://authme.com'});
-      strategy.fail = function() {}
-      strategy.success = function() {}
-      strategy.error = function() {}
+      strategy.fail = function() {};
+      strategy.success = function() {};
+      strategy.error = function() {};
     });
 
     it('should be named bypasstoken', function() {
@@ -89,6 +90,15 @@ describe('DeviceTokenStrategy', function() {
           done();
         });
         request.headers['x-device-token'] = 'error';
+        strategy.authenticate(request);
+      });
+
+      it('fails if the response does not return a user', function () {
+        spyOn(strategy, 'error').and.callFake(function() {
+          expect(strategy.fail).toHaveBeenCalled();
+          done();
+        });
+        request.headers['x-device-token'] = 'no-user';
         strategy.authenticate(request);
       });
 
