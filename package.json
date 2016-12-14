@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "A passport authentication strategy specifically for Bypass",
   "main": "./lib",
-  "private": true,
   "scripts": {
     "test": "./node_modules/.bin/jasmine"
   },
@@ -12,7 +11,7 @@
     "url": "https://github.com/bypasslane/bypass-passport-strategy"
   },
   "dependencies": {
-    "bypass-api-keys-sdk": "git+https://git@github.com/bypasslane/api-keys-js-sdk.git",
+    "bypass-api-keys-sdk": "git+https://git@github.com/bypasslane/api-keys-js-sdk.git#v1.0",
     "passport-strategy": "1.x.x",
     "request-promise": "^1.0.2"
   },
