@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A passport authentication strategy specifically for Bypass",
   "main": "./lib",
+  "private": true,
   "scripts": {
     "test": "./node_modules/.bin/jasmine"
   },
