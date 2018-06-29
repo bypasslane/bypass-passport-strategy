@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/bypass-passport-strategy
+    docker:
+      - image: circleci/node:8-jessie-browsers
+        environment:
+          NODE_ENV: test
+    steps:
+      - checkout
+
+      - run: npm install
+
+      - run: sudo npm i -g karma-cli gulp-cli
+
+      - run: gulp test
