@@ -1,6 +1,0 @@
-general:
-  artifacts:
-    - "coverage"
-test:
-  override:
-    - gulp test
