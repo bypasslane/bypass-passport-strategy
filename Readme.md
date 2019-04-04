@@ -42,12 +42,17 @@ For example, as route middleware in an [Express](http://expressjs.com/)
 application:
 
 ```js
+const passport = require('passport');
+passport.use(new BypassStrategy({ server: config.authURL, jwtSecret: config.jwtSecret }));
 app.post('/login',
   passport.authenticate('bypasstoken'),
   function(req, res) {
     res.redirect('/');
   });
 ```
+BypassStrategy requires an options object upon instantiation with two properties:
+`server`: Clortho's URL, required for validating session tokens
+`jwtSecret`: Our system's HMAC shared secret to decode and verify JWTs.
 
 ## Tests
 
