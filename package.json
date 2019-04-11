@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bypass-api-keys-sdk": "git+https://git@github.com/bypasslane/api-keys-js-sdk.git#v1.0",
+    "jsonwebtoken": "^8.5.1",
     "passport-strategy": "1.x.x",
     "request-promise": "^1.0.2"
   },

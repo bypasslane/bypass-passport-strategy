@@ -55,32 +55,6 @@ describe('BypassAuth', function() {
     });
   });
 
-  describe(".deviceLogin", function() {
-    beforeEach(function() {
-      var scope = nock('http://localhost:3005')
-        .get('/session')
-        .reply(200, JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json')));
-    });
-
-    it("throws an error if no session_token is passed in", function() {
-      expect(()=> { BypassAuth.deviceLogin() }).toThrow(new Error("Invalid device token"));
-    });
-
-    it("returns a promise", function() {
-      var promise = BypassAuth.deviceLogin("http://localhost:3005", "sdfgjdsfgfds");
-      expect(typeof(promise.then)).toEqual('function');
-    });
-
-    it("returns user data if successful", function(done) {
-
-      var promise = BypassAuth.deviceLogin("http://localhost:3005", "CORRECT");
-      promise.then(function(user) {
-        expect(user).toEqual({"user": {}});
-        done();
-      });
-    });
-  });
-
   describe(".restrictToAdmin", function() {
     it("calls next if account.type is Admin", function() {
       var spy = jasmine.createSpy();
