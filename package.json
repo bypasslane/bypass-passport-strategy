@@ -17,6 +17,9 @@
     "passport-strategy": "1.x.x",
     "request-promise": "^1.0.2"
   },
+  "publishConfig": {
+    "registry": "https://bpm.jfrog.io/bpm/api/npm/bypass/"
+  },
   "author": "Jonathan Spies <jonathan.spies@gmail.com>",
   "license": "ISC",
   "devDependencies": {
