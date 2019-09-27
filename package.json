@@ -12,9 +12,9 @@
     "url": "https://github.com/bypasslane/bypass-passport-strategy"
   },
   "dependencies": {
-    "bypass-api-keys-sdk": "git+https://git@github.com/bypasslane/api-keys-js-sdk.git#v1.0",
     "jsonwebtoken": "^8.5.1",
     "passport-strategy": "1.x.x",
+    "crypto-js": "^3.1.7",
     "request-promise": "^1.0.2"
   },
   "publishConfig": {
@@ -37,6 +37,7 @@
     "jasmine": "^2.4.1",
     "mockery": "^1.4.0",
     "nock": "^8.0.0",
-    "node-mocks-http": "^1.5.4"
+    "node-mocks-http": "^1.5.4",
+    "timekeeper": "^0.1.1"
   }
 }
