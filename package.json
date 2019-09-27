@@ -1,6 +1,6 @@
 {
   "name": "bypass-passport-strategy",
-  "version": "1.0.2",
+  "version": "1.2.0",
   "description": "A passport authentication strategy specifically for Bypass",
   "main": "./lib",
   "scripts": {
