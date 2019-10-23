@@ -30,9 +30,9 @@ jobs:
       - uses: actions/setup-node@v1.1.2
         with:
           node-version: 12
-          registry-url: https://npm.pkg.github.com/bypasslane/
-          scope: '@bpm-git-admin'
+          registry-url: https://npm.pkg.github.com/
+          scope: '@bypasslane'
       - run: npm ci
-      - run: npm publish --@bpm-git-admin:registry=https://npm.pkg.github.com/bypasslane/
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
