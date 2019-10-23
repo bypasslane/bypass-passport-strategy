@@ -1,5 +1,5 @@
 {
-  "name": "@bypasslane/bypass-passport-strategy",
+  // "name": "@bpm-git-admin/bypass-passport-strategy",
   "version": "1.2.1",
   "description": "A passport authentication strategy specifically for Bypass",
   "main": "./lib",
