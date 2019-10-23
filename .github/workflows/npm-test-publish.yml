@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [12.x]
     steps:
         - uses: actions/checkout@v1
         - name: Use Node.js ${{ matrix.node-version }}
@@ -27,12 +27,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1.1.2
         with:
           node-version: 12
-          registry-url: https://npm.pkg.github.com/bypasslane
+          registry-url: https://npm.pkg.github.com/bypasslane/
           scope: '@bpm-git-admin'
       - run: npm ci
-      - run: npm publish
+      - run: npm publish --@bpm-git-admin:registry=https://npm.pkg.github.com/bypasslane/
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
