@@ -1,5 +1,5 @@
 {
-  "name": "@bypass/passport-strategy",
+  "name": "@bypasslane/bypass-passport-strategy",
   "version": "1.2.1",
   "description": "A passport authentication strategy specifically for Bypass",
   "main": "./lib",
