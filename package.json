@@ -1,6 +1,6 @@
 {
   "name": "@bypasslane/passport-strategy",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A passport authentication strategy specifically for Bypass",
   "main": "./lib",
   "scripts": {
