@@ -1,5 +1,5 @@
 {
-  "name": "bypass-passport-strategy",
+  "name": "@bypasslane/passport-strategy",
   "version": "2.0.0",
   "description": "A passport authentication strategy specifically for Bypass",
   "main": "./lib",
@@ -11,13 +11,13 @@
     "type": "git",
     "url": "https://github.com/bypasslane/bypass-passport-strategy"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "dependencies": {
     "jsonwebtoken": "^8.5.1",
     "passport-strategy": "1.x.x",
     "request-promise": "^1.0.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "author": "Jonathan Spies <jonathan.spies@gmail.com>",
   "license": "ISC",
