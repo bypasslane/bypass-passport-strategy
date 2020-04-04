@@ -11,6 +11,9 @@
     "type": "git",
     "url": "https://github.com/bypasslane/bypass-passport-strategy"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "dependencies": {
     "jsonwebtoken": "^8.5.1",
     "passport-strategy": "1.x.x",
