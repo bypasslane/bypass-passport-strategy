@@ -1,0 +1,15 @@
+mkdir -p ~/.ssh
+touch ~/.ssh/config
+
+tee -a ~/.ssh/config << END
+Host $1
+  IdentityFile ~/.ssh/id_rsa
+  User git
+END
+
+ssh-keyscan $1 >> ~/.ssh/known_hosts
+
+echo ${!2} | base64 -d > ~/.ssh/id_rsa
+
+chmod 0700 ~/.ssh
+chmod 0400 ~/.ssh/id_rsa

@@ -32,11 +32,18 @@ describe('BypassStrategy', function() {
     }).toThrow();
   });
 
+  describe('without jwtSecret', () => {
+    let strategy;
+    beforeAll(() => {
+      strategy = new BypassStrategy({ server: 'http://authme.com' });
+      strategy.error = () => { };
+    });
+  });
+
   describe('with proper params', function() {
     var strategy;
-
     beforeAll(function() {
-      strategy = new BypassStrategy({server: 'http://authme.com'});
+      strategy = new BypassStrategy({server: 'http://authme.com', jwtSecret: 'mySecret'});
       strategy.fail = function() {}
       strategy.success = function() {}
       strategy.error = function() {}
@@ -98,8 +105,27 @@ describe('BypassStrategy', function() {
         });
         request.headers['x-session-token'] = 'no-user';
         strategy.authenticate(request);
-      })
+      });
 
+      it('calls fail if jwt is not verified', function (done) {
+        // generatedJWT that is already expired
+        const badJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1NTQ4Mzk3MTIsImV4cCI6MTU1NDgzOTczMCwiYXVkIjoiIiwic3ViIjoiIn0.JCMMRHHLRwX8_9qzXQaHg4Rp9u01iWLbyPgYzPly8qE";
+        spyOn(strategy, 'fail').and.callFake(function (msg) {
+          expect(strategy.fail).toHaveBeenCalledWith("invalid signature");
+          done();
+        });
+        strategy.authenticate({ headers: { authorization: `Bearer ${badJWT}` } });
+      });
+
+      it('calls success if jwt is verified', function (done) {
+        // generated JWT that expires in the year 3020, signed by secret 'mySecret'
+        const goodJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE1NTQ5MDkyNjUsImV4cCI6MzMxNDMzNTQwNjUsImF1ZCI6IiIsInN1YiI6IiJ9.MywMpAo0J4omk8lrxnKS046Hzmirf3TS9LyYmWwPR8E";
+        spyOn(strategy, 'success').and.callFake(function (msg) {
+          expect(strategy.success).toHaveBeenCalled();
+          done();
+        });
+        strategy.authenticate({ headers: { authorization: `Bearer ${goodJWT}`} });
+      });
     });
   });
 });
