@@ -14,7 +14,6 @@
   "dependencies": {
     "jsonwebtoken": "^8.5.1",
     "passport-strategy": "1.x.x",
-    "crypto-js": "^3.1.7",
     "request-promise": "^1.0.2"
   },
   "author": "Jonathan Spies <jonathan.spies@gmail.com>",
