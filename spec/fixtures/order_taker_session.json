@@ -1,0 +1,17 @@
+{
+    "token": "token-token",
+    "expires_at": "2020-05-06T20:02:03.461026291Z",
+    "refresh_count": 1,
+    "account": {
+        "id": 1,
+        "active": true,
+        "is_manager": true,
+        "username": "test1",
+        "venue_id": 1,
+        "venue_ids": [
+            1
+        ],
+        "organization_id": 1,
+        "type": "OrderTaker"
+    }
+}

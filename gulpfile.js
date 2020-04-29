@@ -14,7 +14,9 @@ gulp.task('test', ['pre-test'], function () {
   return gulp.src(['spec/*.js'])
     .pipe(jasmine())
     // Creating the reports after tests ran
-    .pipe(istanbul.writeReports())
+    .pipe(istanbul.writeReports({
+      reporters: [ 'lcov', 'html', 'text', 'text-summary' ],
+    }))
     // Enforce a coverage of at least 90%
-    .pipe(istanbul.enforceThresholds({ thresholds: { global: 90 } }));
+    .pipe(istanbul.enforceThresholds({ thresholds: { global: 95 } }));
 });
