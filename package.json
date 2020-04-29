@@ -5,7 +5,8 @@
   "main": "./lib",
   "scripts": {
     "test": "./node_modules/.bin/gulp test",
-    "lint": "eslint ./lib --fix"
+    "lint": "eslint ./lib --fix",
+    "jasmine": "./node_modules/.bin/jasmine"
   },
   "repository": {
     "type": "git",
