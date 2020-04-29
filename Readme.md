@@ -12,11 +12,7 @@ applications.
 This is stored in a private repository. Add the following in your package.json file.
 
 ```json
-{
-  "dependencies": {
-    "bypass-passport-strategy": "git@github.com:bypasslane/bypass-passport-strategy.git"
-  }
-}
+$ npm install --save @bypass/passport-strategy
 ```
 
 ## Usage
@@ -28,7 +24,7 @@ password.  The strategy requires a `verify` callback, which accepts these
 credentials and calls `done` providing a user.
 
 ```js
-var BypassStrategy = require("bypass-passport-strategy").Strategy;
+var BypassStrategy = require("@bypass/passport-strategy").Strategy;
 
 passport.use(new BypassStrategy({server: 'http://where-my-auth-is'}));
 ```
