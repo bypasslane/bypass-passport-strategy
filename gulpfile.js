@@ -10,7 +10,7 @@ gulp.task('pre-test', function () {
     .pipe(istanbul.hookRequire());
 });
 
-gulp.task('test', ['pre-test'], function () {
+gulp.task('test', gulp.series('pre-test', function () {
   return gulp.src(['spec/*.js'])
     .pipe(jasmine())
     // Creating the reports after tests ran
@@ -19,4 +19,4 @@ gulp.task('test', ['pre-test'], function () {
     }))
     // Enforce a coverage of at least 90%
     .pipe(istanbul.enforceThresholds({ thresholds: { global: 95 } }));
-});
+}));
