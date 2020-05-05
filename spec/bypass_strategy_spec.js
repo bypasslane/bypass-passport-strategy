@@ -1,65 +1,55 @@
 /* global describe, it, expect */
 
-var mock = require('./support/mock');
-var fs = require('fs');
+const mock = require('./support/mock');
+const fs = require('fs');
 
 describe('BypassStrategy', function() {
-  var BypassStrategy;
-  beforeEach(function() {
-    mock({
-      './bypass_auth.js': {
-        login: function(server, key) {
-          if (key == "fail") {
-            return Promise.reject({statusCode: 401});
-          } else if (key == "error") {
-            return Promise.reject({statusCode: 500});
-          } else if (key == "no-user") {
-            return Promise.resolve(null);
-          } else {
-            var response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/auth.json'));
-            return Promise.resolve(response);
-          }
-        }
-      }}, function () {
-      BypassStrategy = require('../lib/bypass_strategy');
-    });
-
-  });
-
   it('requires a server', function() {
+    const BypassStrategy = require('../lib/bypass_strategy');
     expect(function() {
       new BypassStrategy()
     }).toThrow();
   });
-
-  describe('without jwtSecret', () => {
+  
+  describe('with proper admin params', function() {
     let strategy;
-    beforeAll(() => {
-      strategy = new BypassStrategy({ server: 'http://authme.com' });
-      strategy.error = () => { };
-    });
-  });
-
-  describe('with proper params', function() {
-    var strategy;
-    beforeAll(function() {
+    let BypassStrategy
+    beforeEach(function() {
+      mock({
+        './bypass_auth.js': {
+          login: function(server, key) {
+            if (key == "fail") {
+              return Promise.reject({statusCode: 401});
+            } else if (key == "error") {
+              return Promise.reject({statusCode: 500});
+            } else if (key == "no-user") {
+              return Promise.resolve(null);
+            } else {
+              let response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/admin_session.json'));
+              return Promise.resolve(response);
+            }
+          }
+        }}, function () {
+        BypassStrategy = require('../lib/bypass_strategy');
+      });
       strategy = new BypassStrategy({server: 'http://authme.com', jwtSecret: 'mySecret'});
       strategy.fail = function() {}
       strategy.success = function() {}
       strategy.error = function() {}
     });
-
+    
     it('should be named bypasstoken', function() {
       expect(strategy.name).toEqual('bypasstoken');
     });
 
     describe('authenticating', function() {
-      var request;
+      let request;
 
       beforeEach(function() {
         request = {
           headers: {
-            'x-session-token': "valid"
+            'x-session-token': "valid",
+            'x-bypass-admin-venue': "1"
           }
         }
       });
@@ -126,6 +116,131 @@ describe('BypassStrategy', function() {
         });
         strategy.authenticate({ headers: { authorization: `Bearer ${goodJWT}`} });
       });
+      
+      it('calls fail() if it uses wrong header', function(done) {
+        spyOn(strategy, 'fail').and.callFake(function(msg) {
+          expect(strategy.fail).toHaveBeenCalledWith("Unauthorized");
+          done();
+        });
+        request.headers['venue-id'] = '2';
+        strategy.authenticate(request);
+      });
+    });
+  });
+  
+  describe('with proper super admin params', function() {
+    let strategy;
+    let BypassStrategy
+    beforeEach(function() {
+      mock({
+        './bypass_auth.js': {
+          login: function(server, key) {
+            if (key == "fail") {
+              return Promise.reject({statusCode: 401});
+            } else if (key == "error") {
+              return Promise.reject({statusCode: 500});
+            } else if (key == "no-user") {
+              return Promise.resolve(null);
+            } else {
+              let response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/super_admin_session.json'));
+              return Promise.resolve(response);
+            }
+          }
+        }}, function () {
+        BypassStrategy = require('../lib/bypass_strategy');
+      });
+      strategy = new BypassStrategy({server: 'http://authme.com', jwtSecret: 'mySecret'});
+      strategy.fail = function() {}
+      strategy.success = function() {}
+      strategy.error = function() {}
+    });
+    
+    describe('authenticating', function() {
+      let request;
+
+      beforeEach(function() {
+        request = {
+          headers: {
+            'x-session-token': "valid",
+            "x-bypass-admin-venue":"1"
+          }
+        }
+      });
+      
+      it('calls success() with the user if it receives a 200', function(done) {
+        spyOn(strategy, 'success').and.callFake(function() {
+          expect(strategy.success).toHaveBeenCalled();
+          done();
+        });
+        strategy.authenticate(request);
+      });
+      
+      it('fails if the response does not return a user', function () {
+        spyOn(strategy, 'error').and.callFake(function() {
+          expect(strategy.fail).toHaveBeenCalled();
+          done();
+        });
+        request.headers['x-session-token'] = 'no-user';
+        strategy.authenticate(request);
+      });
+    });
+  });
+  
+  describe('with proper order taker params', function() {
+    let strategy;
+    let BypassStrategy
+    beforeEach(function() {
+      mock({
+        './bypass_auth.js': {
+          login: function(server, key) {
+            if (key == "fail") {
+              return Promise.reject({statusCode: 401});
+            } else if (key == "error") {
+              return Promise.reject({statusCode: 500});
+            } else if (key == "no-user") {
+              return Promise.resolve(null);
+            } else {
+              let response = JSON.parse(fs.readFileSync(__dirname + '/fixtures/order_taker_session.json'));
+              return Promise.resolve(response);
+            }
+          }
+        }}, function () {
+        BypassStrategy = require('../lib/bypass_strategy');
+      });
+      strategy = new BypassStrategy({server: 'http://authme.com', jwtSecret: 'mySecret'});
+      strategy.fail = function() {}
+      strategy.success = function() {}
+      strategy.error = function() {}
+    });
+    
+    describe('authenticating', function() {
+      let request;
+
+      beforeEach(function() {
+        request = {
+          headers: {
+            'x-session-token': "valid"
+          }
+        }
+      });
+      
+      it('calls success() with the user if it receives a 200', function(done) {
+        spyOn(strategy, 'success').and.callFake(function() {
+          expect(strategy.success).toHaveBeenCalled();
+          done();
+        });
+        strategy.authenticate(request);
+      });
+      
+      it('calls fail() with the user if it uses wrong header', function(done) {
+        spyOn(strategy, 'fail').and.callFake(function(msg) {
+          expect(strategy.fail).toHaveBeenCalledWith("Unauthorized");
+          done();
+        });
+        request.headers['venue-id'] = '2';
+        strategy.authenticate(request);
+      });
+      
     });
   });
 });

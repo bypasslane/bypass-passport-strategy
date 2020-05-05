@@ -8,7 +8,7 @@
     "email": "j@zee.com",
     "organization_id": 0,
     "role_id": 0,
-    "super_admin": false,
+    "super_admin": true,
     "venue_ids": [1]
   }
 }

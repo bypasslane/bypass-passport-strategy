@@ -1,11 +1,12 @@
 {
   "name": "@bypasslane/passport-strategy",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A passport authentication strategy specifically for Bypass",
   "main": "./lib",
   "scripts": {
-    "test": "./node_modules/.bin/jasmine",
-    "lint": "eslint ./lib --fix"
+    "test": "./node_modules/.bin/gulp test",
+    "lint": "eslint ./lib --fix",
+    "jasmine": "./node_modules/.bin/jasmine"
   },
   "repository": {
     "type": "git",
@@ -29,7 +30,7 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-istanbul": "^1.1.1",
     "gulp-jasmine": "^2.4.2",
     "istanbul": "^0.4.5",
